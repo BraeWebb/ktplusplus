@@ -66,7 +66,8 @@ public class Feedback {
 
             for (Violation violation : violations.getOrDefault(category, new ArrayList<>())) {
                 builder.append("  - ").append(violation.getMessage());
-                builder.append(" (e.g. in ").append(violation.getFilename()).append(")");
+                builder.append(" (e.g. in ").append(violation.getFilename())
+                        .append(":").append(violation.getColumn()).append(")");
 
                 builder.append(System.lineSeparator());
             }

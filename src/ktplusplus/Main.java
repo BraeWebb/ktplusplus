@@ -23,8 +23,6 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 public class Main {
-    private static final String SAMPLE = "/Users/brae/work/csse2002/2020s2/ass1/brae01";
-
     private static final Logger LOGGER = Logger.getLogger("kt++");
 
     private static CheckstyleConfig buildConfig(Configuration config) {
@@ -50,6 +48,10 @@ public class Main {
     }
 
     public static void main(String[] args) throws IOException {
+        if (args.length < 2) {
+            System.err.println("usage: ktplusplus <config.yml> <submissions>");
+            System.exit(1);
+        }
         String configFile = args[0];
         Configuration config;
         try {
@@ -82,9 +84,8 @@ public class Main {
             LOGGER.log(Level.SEVERE, "unable to load checkstyle configuration", e);
         }
 
-        FileLoader loader = FileLoader.load(Paths.get(SAMPLE), config.files);
+        FileLoader loader = FileLoader.load(Paths.get(args[1]), config.files);
         for (StudentFolder folder : loader.getFolders()) {
-            System.out.println(folder.getFiles());
             Feedback feedback = factory.getFeedback(folder.getStudent());
 
             CheckstyleListener listener = CheckstyleListener.listener(feedback);

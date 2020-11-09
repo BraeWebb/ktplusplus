@@ -3,12 +3,18 @@ package ktplusplus.checkstyle;
 import com.puppycrawl.tools.checkstyle.api.AuditEvent;
 
 public class Violation {
-    private AuditEvent event;
+    private final AuditEvent event;
+
+    private Violation(String root, AuditEvent event) {
+        this.event = event;
+    }
+
+    protected static Violation fromAudit(String root, AuditEvent event) {
+        return new Violation("", event);
+    }
 
     protected static Violation fromAudit(AuditEvent event) {
-        Violation violation = new Violation();
-        violation.event = event;
-        return violation;
+        return new Violation("", event);
     }
 
     public String getMessage() {
@@ -17,6 +23,10 @@ public class Violation {
 
     public String getFilename() {
         return event.getFileName();
+    }
+
+    public int getColumn() {
+        return event.getColumn();
     }
 
     public String getCheck() {

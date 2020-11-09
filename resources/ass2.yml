@@ -1,0 +1,77 @@
+rubric: Assignment 2
+course: CSSE2002
+semester: 2020s2
+files:
+  - "**/src/bms/building/Building*.java"
+  - "**/src/bms/display/ViewModel.java"
+  - "**/src/bms/exceptions/FileFormatException.java"
+  - "**/src/bms/floor/*.java"
+  - "**/src/bms/hazardevaluation/*.java"
+  - "**/src/bms/room/*.java"
+  - "~**/src/bms/room/RoomType.java"
+  - "**/src/bms/sensors/*.java"
+  - "~**/src/bms/sensors/HazardSensor.java"
+  - "~**/src/bms/sensors/Sensor.java"
+  - "**/src/bms/util/Encodable.java"
+  - "**/src/bms/util/StudyRoomRecommender.java"
+
+categories:
+  - name: Naming
+    total: 7
+    wrongs:
+      - label: Naming casing is incorrect
+        deductions:
+          max: 3
+          linear: 1
+          ignore: 1
+        checks:
+          - name: LocalVariableNameCheck
+            config:
+              format: ^[a-z]([a-z0-9][a-zA-Z0-9]*)?$
+            messages:
+              name.invalidPattern: Local variable name ''{0}'' is not camelCase.
+          - name: MemberNameCheck
+            messages:
+              name.invalidPattern: Member variable name ''{0}'' is not camelCase.
+          - name: ParameterNameCheck
+            messages:
+              name.invalidPattern: Method parameter ''{0}'' is not camelCase.
+          - name: ConstantNameCheck
+            messages:
+              name.invalidPattern: Constant variable ''{0}'' is not SCREAMING_SNAKE_CASE.
+
+  - name: Commenting
+    total: 8
+    wrongs:
+      - label: Method missing docstrings
+        checks:
+          - name: JavadocMethodCheck
+            config:
+              scope: public
+              allowMissingParamTags: true
+#              allowMissingThrowsTags: true
+              allowMissingReturnTag: true
+#              minLineCount: 2
+              allowedAnnotations: Override, Test
+#              allowThrowsTagsForSubclasses: true
+
+  - name: Structure and Layout
+    total: 13
+    wrongs:
+      - label: Vertical whitespace
+        checks:
+          - name: NeedBracesCheck
+          - name: LeftCurlyCheck
+          - name: RightCurlyCheck
+      - label: Magic number
+        checks:
+          - name: ktplusplus.checks.MagicNumber
+          - name: ktplusplus.checks.Hungarian
+            messages:
+              hungarian: "{0} uses Hungarian notation"
+
+
+  - name: Object-oriented Practices
+    total: 7
+
+  - name: General

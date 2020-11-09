@@ -47,8 +47,6 @@ public class CheckstyleListener implements AuditListener {
         feedback.addViolation(Violation.fromAudit(auditEvent));
         int count = violationCount.getOrDefault(auditEvent.getSourceName(), 0);
         violationCount.put(auditEvent.getSourceName(), count + 1);
-//        System.out.println(auditEvent.getSourceName());
-//        System.out.println(auditEvent.getMessage());
     }
 
     @Override

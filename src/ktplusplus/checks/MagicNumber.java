@@ -53,6 +53,6 @@ public class MagicNumber extends AbstractCheck {
             return;
         }
 
-        this.log(ast, "magic number {0} used", value);
+        this.log(ast, "magic", value);
     }
 }
