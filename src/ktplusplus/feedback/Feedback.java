@@ -23,8 +23,20 @@ public class Feedback {
         }
     }
 
-    private String checkName(Check check) {
-        String[] checkParts = check.name.split("\\.");
+    public List<Category> getCategories() {
+        return new ArrayList<>(categories);
+    }
+
+    public Map<Category, List<Violation>> getViolations() {
+        return new HashMap<>(violations);
+    }
+
+    public Map<Category, Float> getGrades() {
+        return new HashMap<>(grades);
+    }
+
+    private String checkName(String check) {
+        String[] checkParts = check.split("\\.");
         return checkParts[checkParts.length - 1];
     }
 
@@ -39,7 +51,7 @@ public class Feedback {
                     continue;
                 }
 
-                for (Check check : wrong.checks) {
+                for (String check : wrong.checks) {
                     String checkName = checkName(check);
 
                     if (violation.getCheck().equalsIgnoreCase(checkName)) {
@@ -52,26 +64,7 @@ public class Feedback {
         }
     }
 
-    public String format() {
-        StringBuilder builder = new StringBuilder();
-        for (Category category : categories) {
-            builder.append(category.name).append(": ");
-
-            if (category.total != 0) {
-                builder.append(grades.get(category)).append("/")
-                        .append(category.total);
-            }
-
-            builder.append(System.lineSeparator());
-
-            for (Violation violation : violations.getOrDefault(category, new ArrayList<>())) {
-                builder.append("  - ").append(violation.getMessage());
-                builder.append(" (e.g. in ").append(violation.getFilename())
-                        .append(":").append(violation.getLineNo()).append(")");
-
-                builder.append(System.lineSeparator());
-            }
-        }
-        return builder.toString();
+    public String format(FeedbackFormatter formatter) {
+        return formatter.format(this);
     }
 }

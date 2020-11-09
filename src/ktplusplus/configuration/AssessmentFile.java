@@ -2,7 +2,7 @@ package ktplusplus.configuration;
 
 import java.util.List;
 
-public class Configuration {
+public class AssessmentFile implements ConfigFile {
     public String rubric;
     public String course;
     public String semester;

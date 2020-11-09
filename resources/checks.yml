@@ -1,0 +1,70 @@
+checks:
+  - name: LocalVariableNameCheck
+    config:
+      format: ^[a-z]([a-z0-9][a-zA-Z0-9]*)?$
+    messages:
+      name.invalidPattern: Local variable name ''{0}'' is not camelCase.
+  - name: MemberNameCheck
+    messages:
+      name.invalidPattern: Member variable name ''{0}'' is not camelCase.
+  - name: ParameterNameCheck
+    messages:
+      name.invalidPattern: Method parameter ''{0}'' is not camelCase.
+  - name: ConstantNameCheck
+    messages:
+      name.invalidPattern: Constant variable ''{0}'' is not SCREAMING_SNAKE_CASE.
+  - name: ktplusplus.checks.Hungarian
+    prompt:
+      context: 1
+      text: Variable ''{0}'' is suspected Hungarian notation, is this correct?
+    messages:
+      hungarian: Variable ''{0}'' uses Hungarian notation
+  - name: ktplusplus.checks.MeaningfulNames
+    prompt:
+      context: 1
+      text: Variable ''{0}'' is suspected to not be meaningful, is this correct?
+  - name: JavadocMethodCheck
+    config:
+      scope: public
+      allowMissingParamTags: true
+      allowMissingReturnTag: true
+      allowedAnnotations: Override
+  - name: MissingJavadocMethodCheck
+    config:
+      allowedAnnotations: Override
+  - name: JavadocTypeCheck
+    config:
+      scope: public
+      allowMissingParamTags: true
+      allowUnknownTags: true
+  - name: MissingJavadocTypeCheck
+  - name: JavadocTypeCheck
+    config:
+      scope: public
+      allowMissingParamTags: true
+      allowUnknownTags: true
+  - name: IndentationCheck
+    config:
+      lineWrappingIndentation: 8
+  - name: WhitespaceAround
+    config:
+      allowEmptyConstructors: true
+      allowEmptyMethods: true
+      allowEmptyTypes: true
+      allowEmptyLoops: true
+  - name: GenericWhitespace
+  - name: MethodParamPad
+  - name: NoWhitespaceBefore
+    config:
+      tokens: COMMA, SEMI, POST_INC, POST_DEC, DOT, ELLIPSIS, METHOD_REF
+      allowLineBreaks: true
+  - name: ParenPad
+  - name: LeftCurlyCheck
+  - name: RightCurlyCheck
+  - name: ktplusplus.checks.MagicNumber
+    prompt:
+      context: 6
+      text: Literal ''{0}'' has been flagged as magic. Is this correct?
+  - name: MethodLengthCheck
+    config:
+      max: 101

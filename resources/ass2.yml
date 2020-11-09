@@ -20,134 +20,74 @@ categories:
     total: 5
     wrongs:
       - label: Misnamed variable
-        deductions:
-          max: 5
-          linear: 1
-          ignore: 1
+        max: 5
+        factor: 1
+        ignore: 1
         checks:
-          - name: LocalVariableNameCheck
-            config:
-              format: ^[a-z]([a-z0-9][a-zA-Z0-9]*)?$
-            messages:
-              name.invalidPattern: Local variable name ''{0}'' is not camelCase.
-          - name: MemberNameCheck
-            messages:
-              name.invalidPattern: Member variable name ''{0}'' is not camelCase.
-          - name: ParameterNameCheck
-            messages:
-              name.invalidPattern: Method parameter ''{0}'' is not camelCase.
-          - name: ConstantNameCheck
-            messages:
-              name.invalidPattern: Constant variable ''{0}'' is not SCREAMING_SNAKE_CASE.
-          - name: ktplusplus.checks.Hungarian
-            prompt:
-              context: 1
-              text: Variable ''{0}'' is suspected Hungarian notation, is this correct?
-            messages:
-              hungarian: Variable ''{0}'' uses Hungarian notation
-          - name: ktplusplus.checks.MeaningfulNames
-            prompt:
-              context: 1
-              text: Variable ''{0}'' is suspected to not be meaningful, is this correct?
+          - LocalVariableNameCheck
+          - MemberNameCheck
+          - ParameterNameCheck
+          - ConstantNameCheck
+          - ktplusplus.checks.Hungarian
+          - ktplusplus.checks.MeaningfulNames
 
   - name: Commenting
     total: 7
     wrongs:
       - label: Javadoc comments on methods
-        deductions:
-          max: 3
-          linear: 1
-          ignore: 3
+        max: 3
+        factor: 1
+        ignore: 3
         checks:
-          - name: JavadocMethodCheck
-            config:
-              scope: public
-              allowMissingParamTags: true
-              allowMissingReturnTag: true
-              allowedAnnotations: Override
-          - name: MissingJavadocMethodCheck
-            config:
-              allowedAnnotations: Override
+          - JavadocMethodCheck
+          - MissingJavadocMethodCheck
       - label: Javadoc comments on classes
-        deductions:
-          max: 1
-          linear: 1
-          ignore: 2
+        max: 1
+        factor: 1
+        ignore: 2
         checks:
-          - name: JavadocTypeCheck
-            config:
-              scope: public
-              allowMissingParamTags: true
-              allowUnknownTags: true
-          - name: MissingJavadocTypeCheck
+          - JavadocTypeCheck
+          - MissingJavadocTypeCheck
       - label: Comments on private variables & methods
-        deductions:
-          max: 4
-          linear: 1
-          ignore: 2
+        max: 4
+        factor: 1
+        ignore: 2
         checks:
-          - name: JavadocTypeCheck
-            config:
-              scope: public
-              allowMissingParamTags: true
-              allowUnknownTags: true
+          - JavadocTypeCheck
 
   - name: Structure and Layout
     total: 7
     wrongs:
       - label: Horizontal spacing
-        deductions:
-          max: 4
-          linear: 1
-          ignore: 0
+        max: 4
+        factor: 1
+        ignore: 0
         checks:
-          - name: IndentationCheck
-            config:
-              lineWrappingIndentation: 8
-          - name: WhitespaceAround
-            config:
-              allowEmptyConstructors: true
-              allowEmptyMethods: true
-              allowEmptyTypes: true
-              allowEmptyLoops: true
-          - name: GenericWhitespace
-          - name: MethodParamPad
-          - name: NoWhitespaceBefore
-            config:
-              tokens: COMMA, SEMI, POST_INC, POST_DEC, DOT, ELLIPSIS, METHOD_REF
-              allowLineBreaks: true
-          - name: ParenPad
+          - IndentationCheck
+          - WhitespaceAround
+          - GenericWhitespace
+          - MethodParamPad
+          - NoWhitespaceBefore
+          - ParenPad
       - label: Vertical whitespace
         checks:
-#          - name: NeedBracesCheck
-          - name: LeftCurlyCheck
-          - name: RightCurlyCheck
-#      - label: Magic number
-#        checks:
-#          - name: ktplusplus.checks.MagicNumber
-
+          - LeftCurlyCheck
+          - RightCurlyCheck
 
   - name: Code Design
     total: 8
     wrongs:
       - label: Magic numbers
-        deductions:
-          max: 3
-          linear: 1
-          ignore: 0
+        max: 3
+        factor: 1
+        ignore: 0
         checks:
-          - name: ktplusplus.checks.MagicNumber
-            prompt:
-              context: 6
-              text: Literal ''{0}'' has been flagged as magic. Is this correct?
+          - ktplusplus.checks.MagicNumber
       - label: Excessive method lengths
-        deductions:
-          max: 3
-          linear: 1
-          ignore: 0
+        max: 3
+        factor: 1
+        ignore: 0
         checks:
-          - name: MethodLengthCheck
-            config:
-              max: 101
+          - MethodLengthCheck
 
   - name: General

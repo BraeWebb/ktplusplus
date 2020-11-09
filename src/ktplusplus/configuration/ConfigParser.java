@@ -7,11 +7,15 @@ import java.io.FileNotFoundException;
 import java.io.FileReader;
 
 public class ConfigParser {
-    public static Configuration parse(String filename)
+    public static AssessmentFile parseAssessmentFile(String filename)
             throws FileNotFoundException, YamlException {
         YamlReader reader = new YamlReader(new FileReader(filename));
-        Configuration config = reader.read(Configuration.class);
+        return reader.read(AssessmentFile.class);
+    }
 
-        return config;
+    public static CheckFile parseCheckFile(String filename)
+            throws FileNotFoundException, YamlException {
+        YamlReader reader = new YamlReader(new FileReader(filename));
+        return reader.read(CheckFile.class);
     }
 }

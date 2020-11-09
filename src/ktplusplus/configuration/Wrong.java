@@ -4,6 +4,9 @@ import java.util.List;
 
 public class Wrong {
     public String label;
-    public Deductions deductions;
-    public List<Check> checks;
+    public List<String> checks;
+
+    public int max;
+    public int factor;
+    public int ignore;
 }

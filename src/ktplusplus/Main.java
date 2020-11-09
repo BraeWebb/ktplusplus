@@ -6,13 +6,11 @@ import com.puppycrawl.tools.checkstyle.DefaultConfiguration;
 import com.puppycrawl.tools.checkstyle.api.CheckstyleException;
 import ktplusplus.checkstyle.CheckstyleConfig;
 import ktplusplus.checkstyle.CheckstyleListener;
-import ktplusplus.configuration.Category;
-import ktplusplus.configuration.Check;
-import ktplusplus.configuration.ConfigParser;
-import ktplusplus.configuration.Configuration;
-import ktplusplus.configuration.Wrong;
+import ktplusplus.configuration.*;
+import ktplusplus.configuration.AssessmentFile;
 import ktplusplus.feedback.Feedback;
 import ktplusplus.feedback.FeedbackFactory;
+import ktplusplus.feedback.StandardFeedbackFormat;
 import ktplusplus.util.FileLoader;
 import ktplusplus.util.StudentFolder;
 
@@ -25,52 +23,54 @@ import java.util.logging.Logger;
 public class Main {
     private static final Logger LOGGER = Logger.getLogger("kt++");
 
-    private static CheckstyleConfig buildConfig(Configuration config) {
+    private static CheckstyleConfig buildConfig(CheckFile config) {
         CheckstyleConfig checks = new CheckstyleConfig();
 
-        for (Category category : config.categories) {
-            if (category.wrongs == null) {
-                continue;
-            }
-
-            for (Wrong wrong : category.wrongs) {
-                if (wrong.checks == null) {
-                    continue;
-                }
-
-                for (Check check : wrong.checks) {
-                    checks.addCheck(check);
-                }
-            }
+        for (Check check : config.checks) {
+            checks.addCheck(check);
         }
 
         return checks;
     }
 
+    private static ConfigFile readYaml(String path, Parser parser) {
+        try {
+            return parser.parse(path);
+        } catch (FileNotFoundException e) {
+            LOGGER.severe("unable to find configuration file: " + path);
+            return null;
+        } catch (YamlException e) {
+            LOGGER.severe("unable to parse config file: " + path);
+            LOGGER.log(Level.SEVERE, "", e);
+            return null;
+        }
+    }
+
     public static void main(String[] args) throws IOException {
-        if (args.length < 2) {
-            System.err.println("usage: ktplusplus <config.yml> <submissions>");
+        if (args.length < 3) {
+            System.err.println("usage: ktplusplus <checks.yml> <assessment.yml> <submissions>");
             System.exit(1);
         }
-        String configFile = args[0];
-        Configuration config;
-        try {
-            config = ConfigParser.parse(configFile);
-        } catch (FileNotFoundException e) {
-            LOGGER.severe("unable to find configuration file: " + configFile);
-            return;
-        } catch (YamlException e) {
-            LOGGER.severe("unable to parse config file: " + configFile);
-            LOGGER.log(Level.SEVERE, "", e);
+
+        AssessmentFile config = (AssessmentFile) readYaml(args[0],
+                ConfigParser::parseAssessmentFile);
+        if (config == null) {
             return;
         }
+
+        CheckFile checks = (CheckFile) readYaml(args[1],
+                ConfigParser::parseCheckFile);
+        if (checks == null) {
+            return;
+        }
+
 
         LOGGER.log(Level.INFO, "Running kt++ on {0} for {1} in {2}",
                 new String[]{config.rubric, config.course, config.semester});
 
 
         DefaultConfiguration configuration = new DefaultConfiguration("Checker");
-        configuration.addChild(buildConfig(config));
+        configuration.addChild(buildConfig(checks));
 
         FeedbackFactory factory = new FeedbackFactory(config.categories);
 
@@ -84,7 +84,7 @@ public class Main {
             LOGGER.log(Level.SEVERE, "unable to load checkstyle configuration", e);
         }
 
-        FileLoader loader = FileLoader.load(Paths.get(args[1]), config.files);
+        FileLoader loader = FileLoader.load(Paths.get(args[2]), config.files);
         for (StudentFolder folder : loader.getFolders()) {
             Feedback feedback = factory.getFeedback(folder.getStudent());
 
@@ -97,7 +97,7 @@ public class Main {
             }
             checker.removeListener(listener);
 
-            System.out.println(feedback.format());
+            System.out.println(feedback.format(new StandardFeedbackFormat()));
         }
     }
 }
