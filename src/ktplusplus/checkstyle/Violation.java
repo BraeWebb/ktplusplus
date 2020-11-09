@@ -25,6 +25,10 @@ public class Violation {
         return event.getFileName();
     }
 
+    public int getLineNo() {
+        return event.getLine();
+    }
+
     public int getColumn() {
         return event.getColumn();
     }

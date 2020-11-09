@@ -42,40 +42,112 @@ categories:
           - name: ktplusplus.checks.Hungarian
             prompt:
               context: 1
-              text: Variable '{0}' is suspected Hungarian notation, is this correct?
+              text: Variable ''{0}'' is suspected Hungarian notation, is this correct?
             messages:
               hungarian: Variable ''{0}'' uses Hungarian notation
           - name: ktplusplus.checks.MeaningfulNames
+            prompt:
+              context: 1
+              text: Variable ''{0}'' is suspected to not be meaningful, is this correct?
 
   - name: Commenting
-    total: 8
+    total: 7
     wrongs:
-      - label: Method missing docstrings
+      - label: Javadoc comments on methods
+        deductions:
+          max: 3
+          linear: 1
+          ignore: 3
         checks:
           - name: JavadocMethodCheck
             config:
               scope: public
               allowMissingParamTags: true
-#              allowMissingThrowsTags: true
               allowMissingReturnTag: true
-#              minLineCount: 2
-              allowedAnnotations: Override, Test
-#              allowThrowsTagsForSubclasses: true
+              allowedAnnotations: Override
+          - name: MissingJavadocMethodCheck
+            config:
+              allowedAnnotations: Override
+      - label: Javadoc comments on classes
+        deductions:
+          max: 1
+          linear: 1
+          ignore: 2
+        checks:
+          - name: JavadocTypeCheck
+            config:
+              scope: public
+              allowMissingParamTags: true
+              allowUnknownTags: true
+          - name: MissingJavadocTypeCheck
+      - label: Comments on private variables & methods
+        deductions:
+          max: 4
+          linear: 1
+          ignore: 2
+        checks:
+          - name: JavadocTypeCheck
+            config:
+              scope: public
+              allowMissingParamTags: true
+              allowUnknownTags: true
 
   - name: Structure and Layout
-    total: 13
+    total: 7
     wrongs:
+      - label: Horizontal spacing
+        deductions:
+          max: 4
+          linear: 1
+          ignore: 0
+        checks:
+          - name: IndentationCheck
+            config:
+              lineWrappingIndentation: 8
+          - name: WhitespaceAround
+            config:
+              allowEmptyConstructors: true
+              allowEmptyMethods: true
+              allowEmptyTypes: true
+              allowEmptyLoops: true
+          - name: GenericWhitespace
+          - name: MethodParamPad
+          - name: NoWhitespaceBefore
+            config:
+              tokens: COMMA, SEMI, POST_INC, POST_DEC, DOT, ELLIPSIS, METHOD_REF
+              allowLineBreaks: true
+          - name: ParenPad
       - label: Vertical whitespace
         checks:
-          - name: NeedBracesCheck
+#          - name: NeedBracesCheck
           - name: LeftCurlyCheck
           - name: RightCurlyCheck
-      - label: Magic number
+#      - label: Magic number
+#        checks:
+#          - name: ktplusplus.checks.MagicNumber
+
+
+  - name: Code Design
+    total: 8
+    wrongs:
+      - label: Magic numbers
+        deductions:
+          max: 3
+          linear: 1
+          ignore: 0
         checks:
           - name: ktplusplus.checks.MagicNumber
-
-
-  - name: Object-oriented Practices
-    total: 7
+            prompt:
+              context: 6
+              text: Literal ''{0}'' has been flagged as magic. Is this correct?
+      - label: Excessive method lengths
+        deductions:
+          max: 3
+          linear: 1
+          ignore: 0
+        checks:
+          - name: MethodLengthCheck
+            config:
+              max: 101
 
   - name: General
