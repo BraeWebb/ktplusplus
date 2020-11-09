@@ -19,6 +19,7 @@ import ktplusplus.util.StudentFolder;
 
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -87,7 +88,8 @@ public class Main {
             LOGGER.log(Level.SEVERE, "unable to load checkstyle configuration", e);
         }
 
-        FileLoader loader = FileLoader.load(Paths.get(args[2]), config.files);
+        Path submissions = Paths.get(args[2]);
+        FileLoader loader = FileLoader.load(submissions, config.files);
         for (StudentFolder folder : loader.getFolders()) {
             Feedback feedback = factory.getFeedback(folder.getStudent());
 
@@ -100,7 +102,7 @@ public class Main {
             }
             checker.removeListener(listener);
 
-            System.out.println(feedback.format(new StandardFeedbackFormat()));
+            System.out.println(feedback.format(new StandardFeedbackFormat(submissions)));
         }
     }
 }
