@@ -17,11 +17,11 @@ files:
 
 categories:
   - name: Naming
-    total: 7
+    total: 5
     wrongs:
-      - label: Naming casing is incorrect
+      - label: Misnamed variable
         deductions:
-          max: 3
+          max: 5
           linear: 1
           ignore: 1
         checks:
@@ -39,6 +39,13 @@ categories:
           - name: ConstantNameCheck
             messages:
               name.invalidPattern: Constant variable ''{0}'' is not SCREAMING_SNAKE_CASE.
+          - name: ktplusplus.checks.Hungarian
+            prompt:
+              context: 1
+              text: Variable '{0}' is suspected Hungarian notation, is this correct?
+            messages:
+              hungarian: Variable ''{0}'' uses Hungarian notation
+          - name: ktplusplus.checks.MeaningfulNames
 
   - name: Commenting
     total: 8
@@ -66,9 +73,6 @@ categories:
       - label: Magic number
         checks:
           - name: ktplusplus.checks.MagicNumber
-          - name: ktplusplus.checks.Hungarian
-            messages:
-              hungarian: "{0} uses Hungarian notation"
 
 
   - name: Object-oriented Practices
