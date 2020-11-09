@@ -1,4 +1,6 @@
-package ktplusplus.configuration;
+package ktplusplus.configuration.files;
+
+import ktplusplus.configuration.model.Check;
 
 import java.util.List;
 

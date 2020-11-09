@@ -1,9 +1,8 @@
 package ktplusplus.feedback;
 
 import ktplusplus.checkstyle.Violation;
-import ktplusplus.configuration.Category;
-import ktplusplus.configuration.Check;
-import ktplusplus.configuration.Wrong;
+import ktplusplus.configuration.model.Category;
+import ktplusplus.configuration.model.Wrong;
 
 import java.util.ArrayList;
 import java.util.HashMap;

@@ -3,7 +3,7 @@ package ktplusplus.checkstyle;
 import com.puppycrawl.tools.checkstyle.DefaultConfiguration;
 import com.puppycrawl.tools.checkstyle.api.CheckstyleException;
 import com.puppycrawl.tools.checkstyle.api.Configuration;
-import ktplusplus.configuration.Check;
+import ktplusplus.configuration.model.Check;
 
 import java.util.ArrayList;
 import java.util.List;

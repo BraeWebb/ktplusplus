@@ -1,4 +1,4 @@
-package ktplusplus.configuration;
+package ktplusplus.configuration.model;
 
 import java.util.Map;
 

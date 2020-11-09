@@ -2,6 +2,8 @@ package ktplusplus.configuration;
 
 import com.esotericsoftware.yamlbeans.YamlException;
 import com.esotericsoftware.yamlbeans.YamlReader;
+import ktplusplus.configuration.files.AssessmentFile;
+import ktplusplus.configuration.files.CheckFile;
 
 import java.io.FileNotFoundException;
 import java.io.FileReader;

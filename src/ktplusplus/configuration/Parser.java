@@ -1,6 +1,7 @@
 package ktplusplus.configuration;
 
 import com.esotericsoftware.yamlbeans.YamlException;
+import ktplusplus.configuration.files.ConfigFile;
 
 import java.io.FileNotFoundException;
 

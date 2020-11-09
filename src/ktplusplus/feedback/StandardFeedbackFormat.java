@@ -1,7 +1,7 @@
 package ktplusplus.feedback;
 
 import ktplusplus.checkstyle.Violation;
-import ktplusplus.configuration.Category;
+import ktplusplus.configuration.model.Category;
 
 import java.util.ArrayList;
 import java.util.List;
