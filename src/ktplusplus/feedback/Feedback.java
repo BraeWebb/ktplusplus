@@ -3,6 +3,7 @@ package ktplusplus.feedback;
 import ktplusplus.checkstyle.Violation;
 import ktplusplus.configuration.model.Category;
 import ktplusplus.configuration.model.Wrong;
+import ktplusplus.util.CheckUtil;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -34,11 +35,6 @@ public class Feedback {
         return new HashMap<>(grades);
     }
 
-    private String checkName(String check) {
-        String[] checkParts = check.split("\\.");
-        return checkParts[checkParts.length - 1];
-    }
-
     public void addViolation(Violation violation) {
         for (Category category : categories) {
             if (category.wrongs == null) {
@@ -51,7 +47,7 @@ public class Feedback {
                 }
 
                 for (String check : wrong.checks) {
-                    String checkName = checkName(check);
+                    String checkName = CheckUtil.checkName(check);
 
                     if (violation.getCheck().equalsIgnoreCase(checkName)) {
                         violations.getOrDefault(category, new ArrayList<>())

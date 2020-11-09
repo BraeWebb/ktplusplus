@@ -6,8 +6,10 @@ import com.puppycrawl.tools.checkstyle.DefaultConfiguration;
 import com.puppycrawl.tools.checkstyle.api.CheckstyleException;
 import ktplusplus.checkstyle.CheckstyleConfig;
 import ktplusplus.checkstyle.CheckstyleListener;
+import ktplusplus.checkstyle.PromptFilter;
 import ktplusplus.configuration.*;
 import ktplusplus.configuration.files.AssessmentFile;
+import ktplusplus.configuration.files.CheckConfig;
 import ktplusplus.configuration.files.CheckFile;
 import ktplusplus.configuration.files.ConfigFile;
 import ktplusplus.configuration.model.Check;
@@ -26,16 +28,6 @@ import java.util.logging.Logger;
 
 public class Main {
     private static final Logger LOGGER = Logger.getLogger("kt++");
-
-    private static CheckstyleConfig buildConfig(CheckFile config) {
-        CheckstyleConfig checks = new CheckstyleConfig();
-
-        for (Check check : config.checks) {
-            checks.addCheck(check);
-        }
-
-        return checks;
-    }
 
     private static ConfigFile readYaml(String path, Parser parser) {
         try {
@@ -62,11 +54,12 @@ public class Main {
             return;
         }
 
-        CheckFile checks = (CheckFile) readYaml(args[1],
+        CheckFile checkFile = (CheckFile) readYaml(args[1],
                 ConfigParser::parseCheckFile);
-        if (checks == null) {
+        if (checkFile == null) {
             return;
         }
+        CheckConfig checks = CheckConfig.fromFile(checkFile);
 
 
         LOGGER.log(Level.INFO, "Running kt++ on {0} for {1} in {2}",
@@ -74,13 +67,14 @@ public class Main {
 
 
         DefaultConfiguration configuration = new DefaultConfiguration("Checker");
-        configuration.addChild(buildConfig(checks));
+        configuration.addChild(checks.build());
 
         FeedbackFactory factory = new FeedbackFactory(config.categories);
 
         Checker checker = new Checker();
 
         checker.setModuleClassLoader(Checker.class.getClassLoader());
+        checker.addFilter(new PromptFilter(checks));
 
         try {
             checker.configure(configuration);
@@ -102,7 +96,7 @@ public class Main {
             }
             checker.removeListener(listener);
 
-            System.out.println(feedback.format(new StandardFeedbackFormat(submissions)));
+//            System.out.println(feedback.format(new StandardFeedbackFormat(submissions)));
         }
     }
 }

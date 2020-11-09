@@ -16,13 +16,11 @@ checks:
   - name: ktplusplus.checks.Hungarian
     prompt:
       context: 1
-      text: Variable ''{0}'' is suspected Hungarian notation, is this correct?
     messages:
       hungarian: Variable ''{0}'' uses Hungarian notation
   - name: ktplusplus.checks.MeaningfulNames
     prompt:
-      context: 1
-      text: Variable ''{0}'' is suspected to not be meaningful, is this correct?
+      context: 3
   - name: JavadocMethodCheck
     config:
       scope: public
@@ -46,25 +44,25 @@ checks:
   - name: IndentationCheck
     config:
       lineWrappingIndentation: 8
-  - name: WhitespaceAround
+  - name: WhitespaceAroundCheck
     config:
       allowEmptyConstructors: true
       allowEmptyMethods: true
       allowEmptyTypes: true
       allowEmptyLoops: true
-  - name: GenericWhitespace
-  - name: MethodParamPad
-  - name: NoWhitespaceBefore
+  - name: GenericWhitespaceCheck
+  - name: MethodParamPadCheck
+  - name: NoWhitespaceBeforeCheck
     config:
       tokens: COMMA, SEMI, POST_INC, POST_DEC, DOT, ELLIPSIS, METHOD_REF
       allowLineBreaks: true
-  - name: ParenPad
+  - name: ParenPadCheck
   - name: LeftCurlyCheck
   - name: RightCurlyCheck
   - name: ktplusplus.checks.MagicNumber
     prompt:
       context: 6
-      text: Literal ''{0}'' has been flagged as magic. Is this correct?
+      hint: Unique values with unexplained meaning or multiple occurrences which could (preferably) be replaced with named constants
   - name: MethodLengthCheck
     config:
       max: 101
