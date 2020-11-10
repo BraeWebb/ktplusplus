@@ -96,7 +96,7 @@ public class Main {
             }
             checker.removeListener(listener);
 
-//            System.out.println(feedback.format(new StandardFeedbackFormat(submissions)));
+            System.out.println(feedback.format(new StandardFeedbackFormat(submissions)));
         }
     }
 }

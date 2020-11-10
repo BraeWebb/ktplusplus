@@ -1,6 +1,7 @@
 package ktplusplus.checkstyle;
 
 import com.puppycrawl.tools.checkstyle.api.AuditEvent;
+import ktplusplus.util.CheckUtil;
 
 public class Violation {
     private final AuditEvent event;
@@ -30,7 +31,6 @@ public class Violation {
     }
 
     public String getCheck() {
-        String[] sourceName = event.getSourceName().split("\\.");
-        return sourceName[sourceName.length - 1];
+        return CheckUtil.checkName(event.getSourceName());
     }
 }
