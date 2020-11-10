@@ -30,6 +30,10 @@ public class Feedback {
         return new HashMap<>(violations);
     }
 
+    public int getViolationCount() {
+        return violations.values().stream().mapToInt(List::size).sum();
+    }
+
     public Map<Category, Float> getGrades() {
         Map<Category, Float> grades = new HashMap<>();
         for (Category category : violations.keySet()) {

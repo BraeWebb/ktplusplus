@@ -54,18 +54,17 @@ public class PromptFilter implements Filter {
         if (check.prompt == null) {
             return true;
         }
-        return true;
 
-//        showContext(Paths.get(event.getFileName()), event.getLine(), check.prompt.context);
-//        System.out.println(event.getMessage());
-//        System.out.print("Is this correct? (y/n): ");
-//        String next = scanner.next();
-//        while (!next.equals("y") && !next.equals("n")) {
-//            System.out.println("invalid input");
-//            System.out.print("Is this correct? (y/n): ");
-//            next = scanner.next();
-//        }
-//
-//        return next.equals("y");
+        showContext(Paths.get(event.getFileName()), event.getLine(), check.prompt.context);
+        System.out.println(event.getMessage());
+        System.out.print("Is this correct? (y/n): ");
+        String next = scanner.next();
+        while (!next.equals("y") && !next.equals("n")) {
+            System.out.println("invalid input");
+            System.out.print("Is this correct? (y/n): ");
+            next = scanner.next();
+        }
+
+        return next.equals("y");
     }
 }

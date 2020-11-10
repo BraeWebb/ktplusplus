@@ -7,6 +7,7 @@ import com.puppycrawl.tools.checkstyle.api.CheckstyleException;
 import ktplusplus.checkstyle.CheckstyleConfig;
 import ktplusplus.checkstyle.CheckstyleListener;
 import ktplusplus.checkstyle.PromptFilter;
+import ktplusplus.checkstyle.ProvidedFilter;
 import ktplusplus.configuration.*;
 import ktplusplus.configuration.files.AssessmentFile;
 import ktplusplus.configuration.files.CheckConfig;
@@ -23,11 +24,15 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.*;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import java.util.stream.Collectors;
 
 public class Main {
     private static final Logger LOGGER = Logger.getLogger("kt++");
+
+    private static final String USAGE = "usage: ktplusplus <checks.yml> <assessment.yml> <submissions> [--provided <provided>] [--prompt]";
 
     private static ConfigFile readYaml(String path, Parser parser) {
         try {
@@ -44,8 +49,37 @@ public class Main {
 
     public static void main(String[] args) throws IOException {
         if (args.length < 3) {
-            System.err.println("usage: ktplusplus <checks.yml> <assessment.yml> <submissions>");
+            System.err.println(USAGE);
             System.exit(1);
+        }
+
+        String provided = null;
+        boolean prompt = false;
+
+        List<String> params = Arrays.stream(args).skip(3).collect(Collectors.toList());
+        Stack<String> arguments = new Stack<>();
+        Collections.reverse(params);
+        arguments.addAll(params);
+
+        while (!arguments.empty()) {
+            String flag = arguments.pop();
+            switch (flag) {
+                case "--provided":
+                    if (arguments.empty()) {
+                        System.err.println("--provided flag needs an argument");
+                        System.err.println(USAGE);
+                        System.exit(1);
+                    }
+                    provided = arguments.pop();
+                    break;
+                case "--prompt":
+                    prompt = true;
+                    break;
+                default:
+                    System.err.println("unrecognised flag: " + flag);
+                    System.err.println(USAGE);
+                    System.exit(1);
+            }
         }
 
         AssessmentFile config = (AssessmentFile) readYaml(args[0],
@@ -61,7 +95,6 @@ public class Main {
         }
         CheckConfig checks = CheckConfig.fromFile(checkFile);
 
-
         LOGGER.log(Level.INFO, "Running kt++ on {0} for {1} in {2}",
                 new String[]{config.rubric, config.course, config.semester});
 
@@ -74,7 +107,17 @@ public class Main {
         Checker checker = new Checker();
 
         checker.setModuleClassLoader(Checker.class.getClassLoader());
-        checker.addFilter(new PromptFilter(checks));
+
+        // filters
+        if (prompt) {
+            checker.addFilter(new PromptFilter(checks));
+        }
+        if (provided != null) {
+            StudentFolder providedFolder = StudentFolder.load(
+                    Paths.get(provided), config.files
+            );
+            checker.addFilter(ProvidedFilter.fromProvided(providedFolder, configuration));
+        }
 
         try {
             checker.configure(configuration);
