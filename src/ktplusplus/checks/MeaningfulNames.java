@@ -43,6 +43,13 @@ public class MeaningfulNames extends AbstractCheck {
     public void visitToken(DetailAST ast) {
         String identifier = ast.findFirstToken(TokenTypes.IDENT).getText();
 
+        if (identifier.length() == 1) {
+            char id = identifier.charAt(0);
+            if (id != 'i' && id != 'j' && id != 'k') {
+                this.log(ast, "single.letter", identifier);
+            }
+        }
+
         for (String part : identifier.split(CAMEL_CASE_PATTERN)) {
             part = part.toLowerCase().replace('_', ' ').trim();
             if (!words.contains(part)) {

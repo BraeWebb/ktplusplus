@@ -12,7 +12,9 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Scanner;
 import java.util.logging.Logger;
 import java.util.stream.Collectors;
@@ -20,6 +22,8 @@ import java.util.stream.Stream;
 
 public class PromptFilter implements Filter {
     private static final Logger LOGGER = Logger.getLogger("kt++");
+
+    private Map<String, Integer> promptsPerCheck = new HashMap<>();
 
     private Scanner scanner;
     private CheckConfig checks;
@@ -55,6 +59,11 @@ public class PromptFilter implements Filter {
             return true;
         }
 
+        int promptCount = promptsPerCheck.getOrDefault(check.name, 0);
+        if (check.prompt.max > 0 && promptCount > check.prompt.max) {
+            return false;
+        }
+
         showContext(Paths.get(event.getFileName()), event.getLine(), check.prompt.context);
         System.out.println(event.getMessage());
         System.out.print("Is this correct? (y/n): ");
@@ -65,6 +74,12 @@ public class PromptFilter implements Filter {
             next = scanner.next();
         }
 
-        return next.equals("y");
+        boolean validWarning = next.equals("y");
+
+        if (validWarning) {
+            promptsPerCheck.put(check.name, promptCount + 1);
+        }
+
+        return validWarning;
     }
 }

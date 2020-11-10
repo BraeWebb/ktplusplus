@@ -43,19 +43,24 @@ categories:
   - name: Commenting
     total: 7
     wrongs:
+      - label: Javadoc comments missing
+        steps:
+          3: 1
+          6: 2
+          15: 3
+        checks:
+          - MissingJavadocMethodCheck
       - label: Javadoc comments on methods
         max: 3
         factor: 1
         ignore: 3
         checks:
           - JavadocMethodCheck
-          - MissingJavadocMethodCheck
       - label: Javadoc comments on classes
         max: 1
         factor: 1
         ignore: 2
         checks:
-          - JavadocTypeCheck
           - MissingJavadocTypeCheck
       - label: Comments on private variables & methods
         max: 4
@@ -63,6 +68,13 @@ categories:
         ignore: 2
         checks:
           - JavadocTypeCheck
+      - label: Comments on private variables & methods
+        steps:
+          2: 1
+          5: 2
+          12: 4
+        checks:
+          - ktplusplus.checks.MemberVariableComments
 
   - name: Structure and Layout
     total: 7

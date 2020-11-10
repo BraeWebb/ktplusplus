@@ -23,6 +23,8 @@ checks:
       context: 3
     messages:
       meaningful: Variable name ''{0}'' is not meaningful or could be improved
+      single.letter: Single letter variable name ''{0}'' is not meaningful or could be improved
+
   - name: JavadocMethodCheck
     config:
       scope: public
@@ -47,6 +49,8 @@ checks:
   - name: MissingJavadocTypeCheck
     messages:
       javadoc.missing: Javadoc is missing for class
+  - name: ktplusplus.checks.MemberVariableComments
+
   - name: IndentationCheck
     config:
       lineWrappingIndentation: 8
@@ -84,6 +88,7 @@ checks:
     prompt:
       context: 6
       hint: Unique values with unexplained meaning or multiple occurrences which could (preferably) be replaced with named constants
+      max: 5
   - name: MethodLengthCheck
     config:
       max: 101
@@ -96,6 +101,7 @@ checks:
       fileExtensions: java
     messages:
       maxLineLen: Line exceeds allowed 80 characters, line is {1,number,integer} characters long
+
   - name: VisibilityModifierCheck
     messages:
       variable.notPrivate: Variable ''{0}'' should be private
