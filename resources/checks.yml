@@ -66,3 +66,8 @@ checks:
   - name: MethodLengthCheck
     config:
       max: 101
+  - name: LineLengthCheck
+    config:
+      max: 80
+      ignorePattern: "^package.*|^import.*|a href|href|http://|https://|ftp://"
+      fileExtensions: java

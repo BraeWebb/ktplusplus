@@ -54,10 +54,23 @@ public class Feedback {
                         .filter(violation -> wrong.checks.contains(violation.getCheck()))
                         .count();
 
-                violationCount = Math.max(0, violationCount - wrong.ignore);
-                violationCount = violationCount * wrong.factor;
-                violationCount = Math.min(wrong.max, violationCount);
-                grade -= violationCount;
+                float deduction = Math.max(0, violationCount - wrong.ignore);
+                deduction = deduction * wrong.factor;
+                deduction = Math.min(wrong.max, deduction);
+                grade -= deduction;
+
+                if (wrong.steps != null) {
+                    float max = 0;
+                    int biggestStep = 0;
+                    for (String stepValue : wrong.steps.keySet()) {
+                        int step = Integer.parseInt(stepValue);
+                        if (step > biggestStep) {
+                            biggestStep = step;
+                            max = wrong.steps.get(stepValue);
+                        }
+                    }
+                    grade -= max;
+                }
             }
             grades.put(category, grade);
         }

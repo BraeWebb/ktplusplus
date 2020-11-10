@@ -73,6 +73,13 @@ categories:
         checks:
           - LeftCurlyCheck
           - RightCurlyCheck
+      - label: Line Length
+        steps:
+          3: 1
+          6: 2
+          10: 3
+        checks:
+          - LineLengthCheck
 
   - name: Code Design
     total: 8

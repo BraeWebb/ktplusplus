@@ -4,6 +4,7 @@ import com.esotericsoftware.yamlbeans.YamlException;
 import com.puppycrawl.tools.checkstyle.Checker;
 import com.puppycrawl.tools.checkstyle.DefaultConfiguration;
 import com.puppycrawl.tools.checkstyle.api.CheckstyleException;
+import com.puppycrawl.tools.checkstyle.api.Configuration;
 import ktplusplus.checkstyle.CheckstyleConfig;
 import ktplusplus.checkstyle.CheckstyleListener;
 import ktplusplus.checkstyle.PromptFilter;
@@ -99,8 +100,7 @@ public class Main {
                 new String[]{config.rubric, config.course, config.semester});
 
 
-        DefaultConfiguration configuration = new DefaultConfiguration("Checker");
-        configuration.addChild(checks.build());
+        Configuration configuration = checks.build();
 
         FeedbackFactory factory = new FeedbackFactory(config.categories);
 
