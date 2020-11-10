@@ -15,6 +15,10 @@ files:
   - "**/src/bms/util/Encodable.java"
   - "**/src/bms/util/StudyRoomRecommender.java"
 
+format:
+  maxWarningsPerCheck: 5
+  exceededMessage: and around {1} other cases...
+
 categories:
   - name: Naming
     total: 5
@@ -28,8 +32,13 @@ categories:
           - MemberNameCheck
           - ParameterNameCheck
           - ConstantNameCheck
-          - ktplusplus.checks.Hungarian
           - ktplusplus.checks.MeaningfulNames
+      - label: Misnamed variable
+        max: 2
+        factor: 1
+        ignore: 0
+        checks:
+          - ktplusplus.checks.Hungarian
 
   - name: Commenting
     total: 7
@@ -96,5 +105,15 @@ categories:
         ignore: 0
         checks:
           - MethodLengthCheck
+
+  - name: Good OO Practices
+    total: 8
+    wrongs:
+      - label: Incorrect access modifiers
+        max: 3
+        factor: 1
+        ignore: 0
+        checks:
+          - VisibilityModifierCheck
 
   - name: General

@@ -17,6 +17,7 @@ import ktplusplus.configuration.files.ConfigFile;
 import ktplusplus.configuration.model.Check;
 import ktplusplus.feedback.Feedback;
 import ktplusplus.feedback.FeedbackFactory;
+import ktplusplus.feedback.FeedbackFormatter;
 import ktplusplus.feedback.StandardFeedbackFormat;
 import ktplusplus.util.FileLoader;
 import ktplusplus.util.StudentFolder;
@@ -139,7 +140,8 @@ public class Main {
             }
             checker.removeListener(listener);
 
-            System.out.println(feedback.format(new StandardFeedbackFormat(submissions)));
+            FeedbackFormatter formatter = new StandardFeedbackFormat(submissions, config);
+            System.out.println(feedback.format(formatter));
         }
     }
 }

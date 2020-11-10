@@ -1,19 +1,24 @@
 package ktplusplus.feedback;
 
 import ktplusplus.checkstyle.Violation;
+import ktplusplus.configuration.files.AssessmentFile;
 import ktplusplus.configuration.model.Category;
+import ktplusplus.util.CheckUtil;
 
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
+import java.text.Format;
+import java.text.MessageFormat;
+import java.util.*;
+import java.util.stream.Collectors;
 
 public class StandardFeedbackFormat implements FeedbackFormatter {
     private final Path root;
+    private final AssessmentFile config;
 
-    public StandardFeedbackFormat(Path root) {
+    public StandardFeedbackFormat(Path root, AssessmentFile config) {
         this.root = root;
+        this.config = config;
     }
 
     private Path relativePath(String path) {
@@ -38,14 +43,37 @@ public class StandardFeedbackFormat implements FeedbackFormatter {
 
             builder.append(System.lineSeparator());
 
-            for (Violation violation : violations.getOrDefault(category, new ArrayList<>())) {
-                Path relativePath = relativePath(violation.getFilename());
+            Map<String, List<Violation>> violationGroup = violations
+                    .getOrDefault(category, new ArrayList<>())
+                    .stream()
+                    .collect(Collectors.groupingBy(Violation::getCheck));
 
-                builder.append("  - ").append(violation.getMessage());
-                builder.append(" (e.g. in ").append(relativePath)
-                        .append(":").append(violation.getLineNo()).append(")");
+            for (Map.Entry<String, List<Violation>> group : violationGroup.entrySet()) {
+                int violationCount = 0;
+                for (Violation violation : group.getValue()) {
+                    violationCount += 1;
 
-                builder.append(System.lineSeparator());
+                    if (config.format != null && config.format.maxWarningsPerCheck > 0) {
+                        if (violationCount > config.format.maxWarningsPerCheck) {
+                            String message = MessageFormat.format(config.format.exceededMessage,
+                                    group.getValue().size(),
+                                    Math.round(group.getValue().size()/10.0) * 10
+                            );
+                            builder.append("  - ")
+                                    .append(message)
+                                    .append(System.lineSeparator());
+                            break;
+                        }
+                    }
+
+                    Path relativePath = relativePath(violation.getFilename());
+
+                    builder.append("  - ").append(violation.getMessage());
+                    builder.append(" (").append(relativePath)
+                            .append(":").append(violation.getLineNo()).append(")");
+
+                    builder.append(System.lineSeparator());
+                }
             }
         }
         return builder.toString();
