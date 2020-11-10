@@ -3,6 +3,7 @@ package ktplusplus.checks;
 import com.puppycrawl.tools.checkstyle.api.AbstractCheck;
 import com.puppycrawl.tools.checkstyle.api.DetailAST;
 import com.puppycrawl.tools.checkstyle.api.TokenTypes;
+import com.puppycrawl.tools.checkstyle.utils.CheckUtil;
 
 public class DepthComplexity extends AbstractCheck {
     private String currentMethod;
@@ -70,6 +71,9 @@ public class DepthComplexity extends AbstractCheck {
     }
 
     private void visitNested(DetailAST ast) {
+        if (CheckUtil.isElseIf(ast)) {
+            return;
+        }
         if (depth > max && !methodChecked) {
             log(ast, "depth.complexity", depth, max, currentMethod);
             methodChecked = true;

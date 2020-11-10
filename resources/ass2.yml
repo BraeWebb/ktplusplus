@@ -75,6 +75,11 @@ categories:
           12: 4
         checks:
           - ktplusplus.checks.MemberVariableComments
+      - label: Comments on large/complex blocks of code
+        max: 2
+        factor: 0.5
+        checks:
+          - ktplusplus.checks.InlineCommenting
 
   - name: Structure and Layout
     total: 7

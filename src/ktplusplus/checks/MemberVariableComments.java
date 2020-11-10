@@ -2,6 +2,8 @@ package ktplusplus.checks;
 
 import com.puppycrawl.tools.checkstyle.api.*;
 
+import java.util.List;
+
 public class MemberVariableComments extends AbstractCheck {
     // todo: make checkstyle config
     private static final int GROUP_LIMIT = 6;
@@ -55,15 +57,26 @@ public class MemberVariableComments extends AbstractCheck {
         return contents.getSingleLineComments().get(lineNo);
     }
 
+    private boolean hasBlockComment(FileContents contents, int lineNoBefore) {
+        int lineNo = lineNoBefore - 2;
+
+        // skip blank lines
+        while (lineNo > 0 && (contents.lineIsBlank(lineNo)
+                || contents.lineIsComment(lineNo))) {
+            lineNo--;
+        }
+
+        return contents.hasIntersectionWithComment(lineNo, 0, lineNo, 0);
+    }
+
     private boolean hasComment(FileContents contents, DetailAST ast) {
-        boolean hasComment = false;
         if (contents.getJavadocBefore(ast.getLineNo()) != null) {
-            hasComment = true;
+            return true;
         }
-        if (getSingleLineComment(contents, ast.getLineNo()) != null) {
-            hasComment = true;
+        if (hasBlockComment(contents, ast.getLineNo())) {
+            return true;
         }
-        return hasComment;
+        return getSingleLineComment(contents, ast.getLineNo()) != null;
     }
 
     @Override

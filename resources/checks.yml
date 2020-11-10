@@ -50,6 +50,14 @@ checks:
     messages:
       javadoc.missing: Javadoc is missing for class
   - name: ktplusplus.checks.MemberVariableComments
+    messages:
+      comment.missing.member: Private member variables need to have some sort of documentation via comments, {0} does not
+      comment.missing.method: Private methods need to be documented (not necessarily with Javadocs), {0} is not
+  - name: ktplusplus.checks.InlineCommenting
+    config:
+      gap: 35
+    messages:
+      comment.missing.inline: Method {0} would benefit from more inline comments
 
   - name: IndentationCheck
     config:

@@ -49,8 +49,7 @@ public class Violation {
         if (o == null || getClass() != o.getClass()) return false;
         Violation violation = (Violation) o;
 
-        return violation.getLineNo() == getLineNo()
-                && violation.getColumn() == getColumn()
+        return violation.getColumn() == getColumn()
                 && violation.getMessage().equals(getMessage())
                 && violation.getCheck().equals(getCheck())
                 && violation.getBasename().equals(getBasename());
@@ -58,7 +57,17 @@ public class Violation {
 
     @Override
     public int hashCode() {
-        return Objects.hash(getLineNo(), getColumn(),
-                getMessage(), getCheck(), getBasename());
+        return Objects.hash(getColumn(), getMessage(), getCheck(), getBasename());
+    }
+
+    @Override
+    public String toString() {
+        return "Violation{" +
+                "lineNo=" + getLineNo() +
+                ", column=" + getColumn() +
+                ", message=" + getMessage() +
+                ", check=" + getCheck() +
+                ", basename=" + getBasename() +
+                '}';
     }
 }

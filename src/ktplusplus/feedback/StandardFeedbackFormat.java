@@ -24,7 +24,8 @@ public class StandardFeedbackFormat implements FeedbackFormatter {
     private Path relativePath(String path) {
         Path absPath = Paths.get(path);
         Path relativePath = root.toAbsolutePath().relativize(absPath);
-        return relativePath.subpath(1, relativePath.getNameCount());
+        return relativePath;
+//        return relativePath.subpath(1, relativePath.getNameCount());
     }
 
     @Override
