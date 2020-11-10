@@ -21,29 +21,40 @@ checks:
   - name: ktplusplus.checks.MeaningfulNames
     prompt:
       context: 3
+    messages:
+      meaningful: Variable name ''{0}'' is not meaningful or could be improved
   - name: JavadocMethodCheck
     config:
       scope: public
-      allowMissingParamTags: true
+      allowMissingParamTags: false
       allowMissingReturnTag: true
       allowedAnnotations: Override
+    messages:
+      javadoc.expectedTag: A description for the parameter ''{1}'' is missing from Javadoc
+    prompt:
+      context: 8
+      hint: Confirm that this Javadoc warning is valid
   - name: MissingJavadocMethodCheck
     config:
       allowedAnnotations: Override
+    messages:
+      javadoc.missing: Javadoc is missing for method
   - name: JavadocTypeCheck
     config:
       scope: public
       allowMissingParamTags: true
       allowUnknownTags: true
   - name: MissingJavadocTypeCheck
-  - name: JavadocTypeCheck
-    config:
-      scope: public
-      allowMissingParamTags: true
-      allowUnknownTags: true
+    messages:
+      javadoc.missing: Javadoc is missing for class
   - name: IndentationCheck
     config:
       lineWrappingIndentation: 8
+    messages:
+      indentation.child.error: Line has incorrect indentation level of {1}, should be {2}
+      indentation.child.error.multi: Line has incorrect indentation level of {1}, should be one of {2}
+      indentation.error: Line has incorrect indentation level of {1}, should be {2}
+      indentation.error.multi: Line has incorrect indentation level of {1}, should be one of {2}
   - name: WhitespaceAroundCheck
     config:
       allowEmptyConstructors: true
@@ -58,16 +69,33 @@ checks:
       allowLineBreaks: true
   - name: ParenPadCheck
   - name: LeftCurlyCheck
+    messages:
+      line.break.after: Missing new line after {0}
+      line.break.before: Missing new line before {0}
+      line.alone: Line should only contain {0}
   - name: RightCurlyCheck
+    messages:
+      line.break.after: Missing new line after {0}
+      line.break.before: Missing new line before {0}
+      line.alone: Line should only contain {0}
   - name: ktplusplus.checks.MagicNumber
+    messages:
+      magic: Use of the magical number {0}
     prompt:
       context: 6
       hint: Unique values with unexplained meaning or multiple occurrences which could (preferably) be replaced with named constants
   - name: MethodLengthCheck
     config:
       max: 101
+    messages:
+      maxLen.method: Method is excessively long ({0} lines!)
   - name: LineLengthCheck
     config:
-      max: 80
+      max: 85
       ignorePattern: "^package.*|^import.*|a href|href|http://|https://|ftp://"
       fileExtensions: java
+    messages:
+      maxLineLen: Line exceeds allowed 80 characters, line is {1,number,integer} characters long
+  - name: VisibilityModifierCheck
+    messages:
+      variable.notPrivate: Variable ''{0}'' should be private
