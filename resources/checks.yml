@@ -89,6 +89,11 @@ checks:
       context: 6
       hint: Unique values with unexplained meaning or multiple occurrences which could (preferably) be replaced with named constants
       max: 5
+  - name: ktplusplus.checks.DepthComplexity
+    config:
+      max: 3
+    messages:
+      depth.complexity: Method {2} contains an excessive amount of nesting
   - name: MethodLengthCheck
     config:
       max: 101

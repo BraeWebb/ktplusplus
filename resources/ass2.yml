@@ -117,6 +117,12 @@ categories:
         ignore: 0
         checks:
           - MethodLengthCheck
+      - label: Depth complexity
+        max: 2
+        factor: 1
+        ignore: 0
+        checks:
+          - ktplusplus.checks.DepthComplexity
 
   - name: Good OO Practices
     total: 8
