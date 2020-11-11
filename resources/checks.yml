@@ -144,7 +144,7 @@ checks:
   - name: VisibilityModifierCheck
     messages:
       variable.notPrivate: Variable ''{0}'' should be private
-
   - name: ktplusplus.checks.HashCodeImplementation
     config:
       requiredUsages: 3
+  - name: ktplusplus.checks.MemberUsage

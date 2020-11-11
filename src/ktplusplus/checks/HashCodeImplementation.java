@@ -40,6 +40,11 @@ public class HashCodeImplementation extends FieldVisitor {
     }
 
     @Override
+    public void visitField(DetailAST ast) {
+        // do nothing
+    }
+
+    @Override
     public void leaveToken(DetailAST ast) {
         if (ast.getType() != TokenTypes.METHOD_DEF) {
             super.leaveToken(ast);

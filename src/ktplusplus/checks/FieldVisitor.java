@@ -74,6 +74,9 @@ public abstract class FieldVisitor extends AbstractCheck {
             case TokenTypes.PARAMETER_DEF:
             case TokenTypes.PATTERN_VARIABLE_DEF:
             case TokenTypes.RECORD_COMPONENT_DEF:
+                if (frame.currentScope() != Scope.METHOD) {
+                    visitField(ast);
+                }
                 frame.addField(ident);
                 break;
 
@@ -118,7 +121,7 @@ public abstract class FieldVisitor extends AbstractCheck {
         }
         if (parent.getParent() != null) {
             switch (parent.getParent().getType()) {
-                case TokenTypes.METHOD_CALL:
+//                case TokenTypes.METHOD_CALL:
                 case TokenTypes.TYPE:
                     return;
             }
@@ -129,4 +132,5 @@ public abstract class FieldVisitor extends AbstractCheck {
     }
 
     public abstract void visitReference(DetailAST ast);
+    public abstract void visitField(DetailAST ast);
 }

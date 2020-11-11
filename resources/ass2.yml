@@ -168,6 +168,12 @@ categories:
         ignore: 0
         checks:
           - ktplusplus.checks.HashCodeImplementation
+      - label: Unnecessary state
+        max: 3
+        factor: 1
+        ignore: 0
+        checks:
+          - ktplusplus.checks.MemberUsage
       - label: Incorrect access modifiers
         max: 3
         factor: 1
