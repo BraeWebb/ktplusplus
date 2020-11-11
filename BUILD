@@ -1,6 +1,6 @@
 java_library(
     name = "ktplusplus_library",
-    srcs = glob(["src/**/*.java"]),
+    srcs = glob(["src/**/*.java", "src/**/*.properties"]),
     deps = [
         "@maven//:com_puppycrawl_tools_checkstyle",
         "@maven//:com_esotericsoftware_yamlbeans_yamlbeans",

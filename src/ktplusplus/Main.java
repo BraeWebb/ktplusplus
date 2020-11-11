@@ -5,10 +5,8 @@ import com.puppycrawl.tools.checkstyle.Checker;
 import com.puppycrawl.tools.checkstyle.DefaultConfiguration;
 import com.puppycrawl.tools.checkstyle.api.CheckstyleException;
 import com.puppycrawl.tools.checkstyle.api.Configuration;
-import ktplusplus.checkstyle.CheckstyleConfig;
-import ktplusplus.checkstyle.CheckstyleListener;
-import ktplusplus.checkstyle.PromptFilter;
-import ktplusplus.checkstyle.ProvidedFilter;
+import com.puppycrawl.tools.checkstyle.api.FilterSet;
+import ktplusplus.checkstyle.*;
 import ktplusplus.configuration.*;
 import ktplusplus.configuration.files.AssessmentFile;
 import ktplusplus.configuration.files.CheckConfig;
@@ -33,7 +31,7 @@ import java.util.stream.Collectors;
 public class Main {
     private static final Logger LOGGER = Logger.getLogger("kt++");
 
-    private static final String USAGE = "usage: ktplusplus <checks.yml> <assessment.yml> <submissions> [--provided <provided>] [--prompt] [--grades <output>]";
+    private static final String USAGE = "usage: ktplusplus <assessment.yml> <checks.yml> <submissions> [--provided <provided>] [--prompt] [--grades <output>]";
 
     private static ConfigFile readYaml(String path, Parser parser) {
         try {
@@ -114,14 +112,16 @@ public class Main {
         FeedbackFactory factory = new FeedbackFactory(config.categories);
 
         Checker checker = new Checker();
-
         checker.setModuleClassLoader(Checker.class.getClassLoader());
+
+        FilterSet filers = new OrderedFilterSet();
+        checker.addFilter(filers);
 
         if (provided != null) {
             StudentFolder providedFolder = StudentFolder.load(
                     Paths.get(provided), config.files
             );
-            checker.addFilter(ProvidedFilter.fromProvided(providedFolder, configuration));
+            filers.addFilter(ProvidedFilter.fromProvided(providedFolder, configuration));
         }
 
         try {
@@ -140,7 +140,7 @@ public class Main {
             checker.addListener(listener);
             PromptFilter filter = new PromptFilter(checks);
             if (prompt) {
-                checker.addFilter(filter);
+                filers.addFilter(filter);
             }
             try {
                 checker.process(folder.getFiles());
@@ -149,7 +149,7 @@ public class Main {
             }
             checker.removeListener(listener);
             if (prompt) {
-                checker.removeFilter(filter);
+                filers.removeFilter(filter);
             }
 
             FeedbackFormatter formatter = new StandardFeedbackFormat(submissions, config);

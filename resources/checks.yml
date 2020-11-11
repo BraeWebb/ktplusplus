@@ -99,7 +99,7 @@ checks:
       line.break.after: Missing new line after {0}
       line.break.before: Missing new line before {0}
       line.alone: Line should only contain {0}
-  - name: EmptyLineSeparator
+  - name: EmptyLineSeparatorCheck
     config:
       allowNoEmptyLineBetweenFields: true
   - name: LineLengthCheck

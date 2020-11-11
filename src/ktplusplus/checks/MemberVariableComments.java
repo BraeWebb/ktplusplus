@@ -50,7 +50,7 @@ public class MemberVariableComments extends AbstractCheck {
         int lineNo = lineNoBefore - 2;
 
         // skip blank lines
-        while (lineNo > 0 && (contents.lineIsBlank(lineNo) || contents.lineIsComment(lineNo))) {
+        while (lineNo > 0 && (contents.lineIsBlank(lineNo))) {
             lineNo--;
         }
 

@@ -56,15 +56,14 @@ public class Violation {
         if (o == null || getClass() != o.getClass()) return false;
         Violation violation = (Violation) o;
 
-        return violation.getColumn() == getColumn()
-                && violation.getMessage().equals(getMessage())
+        return violation.getMessage().equals(getMessage())
                 && violation.getId().equals(getId())
                 && violation.getBasename().equals(getBasename());
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(getColumn(), getMessage(), getId(), getBasename());
+        return Objects.hash(getMessage(), getId(), getBasename());
     }
 
     @Override

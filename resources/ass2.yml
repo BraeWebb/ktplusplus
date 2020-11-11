@@ -92,7 +92,7 @@ categories:
           - ParenPad
       - label: Vertical whitespace
         checks:
-          - EmptyLineSeparator
+          - EmptyLineSeparatorCheck
       - label: Line Length
         steps:
           3: 1
