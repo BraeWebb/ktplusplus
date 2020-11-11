@@ -64,7 +64,7 @@ public class Feedback {
                     int biggestStep = 0;
                     for (String stepValue : wrong.steps.keySet()) {
                         int step = Integer.parseInt(stepValue);
-                        if (step > biggestStep) {
+                        if (step > biggestStep && violationCount >= step) {
                             biggestStep = step;
                             max = wrong.steps.get(stepValue);
                         }
@@ -72,7 +72,7 @@ public class Feedback {
                     grade -= max;
                 }
             }
-            grades.put(category, grade);
+            grades.put(category, Math.max(0, grade));
         }
         return grades;
     }

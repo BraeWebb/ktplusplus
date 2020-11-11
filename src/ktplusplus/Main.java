@@ -24,8 +24,7 @@ import ktplusplus.util.StudentFolder;
 
 import java.io.FileNotFoundException;
 import java.io.IOException;
-import java.nio.file.Path;
-import java.nio.file.Paths;
+import java.nio.file.*;
 import java.util.*;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -34,7 +33,7 @@ import java.util.stream.Collectors;
 public class Main {
     private static final Logger LOGGER = Logger.getLogger("kt++");
 
-    private static final String USAGE = "usage: ktplusplus <checks.yml> <assessment.yml> <submissions> [--provided <provided>] [--prompt]";
+    private static final String USAGE = "usage: ktplusplus <checks.yml> <assessment.yml> <submissions> [--provided <provided>] [--prompt] [--grades <output>]";
 
     private static ConfigFile readYaml(String path, Parser parser) {
         try {
@@ -56,6 +55,7 @@ public class Main {
         }
 
         String provided = null;
+        String grades = null;
         boolean prompt = false;
 
         List<String> params = Arrays.stream(args).skip(3).collect(Collectors.toList());
@@ -73,6 +73,14 @@ public class Main {
                         System.exit(1);
                     }
                     provided = arguments.pop();
+                    break;
+                case "--grades":
+                    if (arguments.empty()) {
+                        System.err.println("--grades flag needs an argument");
+                        System.err.println(USAGE);
+                        System.exit(1);
+                    }
+                    grades = arguments.pop();
                     break;
                 case "--prompt":
                     prompt = true;
@@ -109,10 +117,6 @@ public class Main {
 
         checker.setModuleClassLoader(Checker.class.getClassLoader());
 
-        // filters
-        if (prompt) {
-            checker.addFilter(new PromptFilter(checks));
-        }
         if (provided != null) {
             StudentFolder providedFolder = StudentFolder.load(
                     Paths.get(provided), config.files
@@ -129,19 +133,37 @@ public class Main {
         Path submissions = Paths.get(args[2]);
         FileLoader loader = FileLoader.load(submissions, config.files);
         for (StudentFolder folder : loader.getFolders()) {
+            System.out.println("*********** " + folder.getStudent() + " ***********");
             Feedback feedback = factory.getFeedback(folder.getStudent());
 
             CheckstyleListener listener = CheckstyleListener.listener(feedback);
             checker.addListener(listener);
+            PromptFilter filter = new PromptFilter(checks);
+            if (prompt) {
+                checker.addFilter(filter);
+            }
             try {
                 checker.process(folder.getFiles());
             } catch (CheckstyleException e) {
                 LOGGER.log(Level.SEVERE, "", e);
             }
             checker.removeListener(listener);
+            if (prompt) {
+                checker.removeFilter(filter);
+            }
 
             FeedbackFormatter formatter = new StandardFeedbackFormat(submissions, config);
-            System.out.println(feedback.format(formatter));
+            if (grades != null) {
+                Path feedbackFile = Paths.get(grades, folder.getStudent() + ".style");
+                Files.write(
+                        feedbackFile,
+                        Arrays.asList(feedback.format(formatter).split("\n")),
+                        StandardOpenOption.CREATE,
+                        StandardOpenOption.WRITE
+                );
+            } else {
+                System.out.println(feedback.format(formatter));
+            }
         }
     }
 }

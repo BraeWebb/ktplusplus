@@ -16,11 +16,13 @@ checks:
   - name: ktplusplus.checks.Hungarian
     prompt:
       context: 1
+      max: 5
     messages:
       hungarian: Variable ''{0}'' uses Hungarian notation
   - name: ktplusplus.checks.MeaningfulNames
     prompt:
       context: 3
+      max: 5
     messages:
       meaningful: Variable name ''{0}'' is not meaningful or could be improved
       single.letter: Single letter variable name ''{0}'' is not meaningful or could be improved
@@ -35,6 +37,7 @@ checks:
       javadoc.expectedTag: A description for the parameter ''{1}'' is missing from Javadoc
     prompt:
       context: 8
+      max: 5
       hint: Confirm that this Javadoc warning is valid
   - name: MissingJavadocMethodCheck
     config:
@@ -53,11 +56,17 @@ checks:
     messages:
       comment.missing.member: Private member variables need to have some sort of documentation via comments, {0} does not
       comment.missing.method: Private methods need to be documented (not necessarily with Javadocs), {0} is not
+    prompt:
+      context: 10
+      max: 6
   - name: ktplusplus.checks.InlineCommenting
     config:
       gap: 35
     messages:
       comment.missing.inline: Method {0} would benefit from more inline comments
+    prompt:
+      context: 40
+      max: 4
 
   - name: IndentationCheck
     config:
@@ -100,7 +109,7 @@ checks:
       fileExtensions: java
     messages:
       maxLineLen: Line exceeds allowed 80 characters, line is {1,number,integer} characters long
-  - name: NeedBraces
+  - name: NeedBracesCheck
 
 
   - name: ktplusplus.checks.MagicNumber
@@ -134,12 +143,18 @@ checks:
       max: 3
     messages:
       depth.complexity: Method {2} contains a lot of nesting
+    prompt:
+      context: 10
+      max: 5
   - name: ktplusplus.checks.DepthComplexity
     id: DepthComplexity5
     config:
       max: 5
     messages:
       depth.complexity: Method {2} contains an excessive amount of nesting
+    prompt:
+      context: 10
+      max: 5
 
   - name: VisibilityModifierCheck
     messages:
@@ -147,4 +162,11 @@ checks:
   - name: ktplusplus.checks.HashCodeImplementation
     config:
       requiredUsages: 3
+    prompt:
+      context: 15
+      max: 3
+    messages:
+      hashcode.complexity: HashCode method for {0} is not suitable
   - name: ktplusplus.checks.MemberUsage
+    prompt:
+      context: 20

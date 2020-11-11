@@ -39,7 +39,7 @@ public class StudentFolder {
     }
 
     public String getStudent() {
-        return this.base.toString();
+        return this.base.subpath(base.getNameCount() - 1, base.getNameCount()).toString();
     }
 
     public List<File> getFiles() {

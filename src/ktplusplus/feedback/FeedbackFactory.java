@@ -2,6 +2,7 @@ package ktplusplus.feedback;
 
 import ktplusplus.configuration.model.Category;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class FeedbackFactory {
@@ -12,6 +13,6 @@ public class FeedbackFactory {
     }
 
     public Feedback getFeedback(String sid) {
-        return new Feedback(categories);
+        return new Feedback(new ArrayList<>(categories));
     }
 }

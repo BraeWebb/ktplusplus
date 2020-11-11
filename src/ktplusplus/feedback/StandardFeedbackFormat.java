@@ -28,6 +28,14 @@ public class StandardFeedbackFormat implements FeedbackFormatter {
 //        return relativePath.subpath(1, relativePath.getNameCount());
     }
 
+    public static String chopDecimal(float grade) {
+        if (grade == (long) grade) {
+            return String.format("%d", (long) grade);
+        } else {
+            return String.format("%s", grade);
+        }
+    }
+
     @Override
     public String format(Feedback feedback) {
         Map<Category, List<Violation>> violations = feedback.getViolations();
@@ -38,7 +46,7 @@ public class StandardFeedbackFormat implements FeedbackFormatter {
             builder.append(category.name).append(": ");
 
             if (category.total != 0) {
-                builder.append(grades.get(category)).append("/")
+                builder.append(chopDecimal(grades.get(category))).append("/")
                         .append(category.total);
             }
 
@@ -47,7 +55,7 @@ public class StandardFeedbackFormat implements FeedbackFormatter {
             Map<String, List<Violation>> violationGroup = violations
                     .getOrDefault(category, new ArrayList<>())
                     .stream()
-                    .collect(Collectors.groupingBy(Violation::getCheck));
+                    .collect(Collectors.groupingBy(Violation::getId));
 
             for (Map.Entry<String, List<Violation>> group : violationGroup.entrySet()) {
                 int violationCount = 0;
