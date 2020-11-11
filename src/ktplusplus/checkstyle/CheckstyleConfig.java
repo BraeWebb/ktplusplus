@@ -12,6 +12,10 @@ import java.util.Map;
 public class CheckstyleConfig implements Configuration {
     static Configuration fromCheck(Check check) {
         DefaultConfiguration checkConfig = new DefaultConfiguration(check.name);
+        if (check.id != null) {
+            checkConfig.addAttribute("id", check.id);
+        }
+
         if (check.config != null) {
             for (Map.Entry<String, String> attr : check.config.entrySet()) {
                 checkConfig.addAttribute(attr.getKey(), attr.getValue());

@@ -59,15 +59,9 @@ categories:
       - label: Javadoc comments on classes
         max: 1
         factor: 1
-        ignore: 2
+        ignore: 1
         checks:
           - MissingJavadocTypeCheck
-      - label: Comments on private variables & methods
-        max: 4
-        factor: 1
-        ignore: 2
-        checks:
-          - JavadocTypeCheck
       - label: Comments on private variables & methods
         steps:
           2: 1
@@ -76,8 +70,9 @@ categories:
         checks:
           - ktplusplus.checks.MemberVariableComments
       - label: Comments on large/complex blocks of code
-        max: 2
-        factor: 0.5
+        steps:
+          3: 1
+          6: 2
         checks:
           - ktplusplus.checks.InlineCommenting
 
@@ -97,8 +92,7 @@ categories:
           - ParenPad
       - label: Vertical whitespace
         checks:
-          - LeftCurlyCheck
-          - RightCurlyCheck
+          - EmptyLineSeparator
       - label: Line Length
         steps:
           3: 1
@@ -106,6 +100,14 @@ categories:
           10: 3
         checks:
           - LineLengthCheck
+      - label: Miscellaneous structure and layout violations
+        max: 2
+        factor: 1
+        ignore: 0
+        checks:
+          - NeedBracesCheck
+          - LeftCurlyCheck
+          - RightCurlyCheck
 
   - name: Code Design
     total: 8
@@ -116,18 +118,46 @@ categories:
         ignore: 0
         checks:
           - ktplusplus.checks.MagicNumber
-      - label: Excessive method lengths
-        max: 3
+      - label: Excessive method lengths 101+
+        max: 1
         factor: 1
         ignore: 0
         checks:
-          - MethodLengthCheck
-      - label: Depth complexity
+          - MethodLengthCheck101
+      - label: Excessive method lengths 121+
+        max: 2
+        factor: 2
+        ignore: 0
+        checks:
+          - MethodLengthCheck121
+      - label: Excessive method lengths 140+
+        max: 3
+        factor: 3
+        ignore: 0
+        checks:
+          - MethodLengthCheck140
+      - label: Depth complexity 3+
         max: 2
         factor: 1
         ignore: 0
         checks:
-          - ktplusplus.checks.DepthComplexity
+          - DepthComplexity3
+      - label: Depth complexity 5+
+        max: 2
+        factor: 2
+        ignore: 0
+        checks:
+          - DepthComplexity5
+      - label: Try-catch distance
+        max: 1
+        factor: 1
+        ignore: 0
+      - label: Exceptions
+        max: 2
+        factor: 1
+        ignore: 0
+        checks:
+          - IllegalCatchCheck
 
   - name: Good OO Practices
     total: 8

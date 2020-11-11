@@ -51,7 +51,7 @@ public class Feedback {
 
                 long violationCount = violations
                         .stream()
-                        .filter(violation -> wrong.checks.contains(violation.getCheck()))
+                        .filter(violation -> wrong.checks.contains(violation.getId()))
                         .count();
 
                 float deduction = Math.max(0, violationCount - wrong.ignore);
@@ -91,7 +91,7 @@ public class Feedback {
                 for (String check : wrong.checks) {
                     String checkName = CheckUtil.checkName(check);
 
-                    if (violation.getCheck().equalsIgnoreCase(checkName)) {
+                    if (violation.getId().equalsIgnoreCase(checkName)) {
                         violations.getOrDefault(category, new ArrayList<>())
                                 .add(violation);
                     }

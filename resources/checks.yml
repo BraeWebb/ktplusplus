@@ -90,23 +90,9 @@ checks:
       line.break.after: Missing new line after {0}
       line.break.before: Missing new line before {0}
       line.alone: Line should only contain {0}
-  - name: ktplusplus.checks.MagicNumber
-    messages:
-      magic: Use of the magical number {0}
-    prompt:
-      context: 6
-      hint: Unique values with unexplained meaning or multiple occurrences which could (preferably) be replaced with named constants
-      max: 5
-  - name: ktplusplus.checks.DepthComplexity
+  - name: EmptyLineSeparator
     config:
-      max: 3
-    messages:
-      depth.complexity: Method {2} contains an excessive amount of nesting
-  - name: MethodLengthCheck
-    config:
-      max: 101
-    messages:
-      maxLen.method: Method is excessively long ({0} lines!)
+      allowNoEmptyLineBetweenFields: true
   - name: LineLengthCheck
     config:
       max: 85
@@ -114,6 +100,46 @@ checks:
       fileExtensions: java
     messages:
       maxLineLen: Line exceeds allowed 80 characters, line is {1,number,integer} characters long
+  - name: NeedBraces
+
+
+  - name: ktplusplus.checks.MagicNumber
+    messages:
+      magic: Use of the magical number {0}
+    prompt:
+      context: 6
+      hint: Unique values with unexplained meaning or multiple occurrences which could (preferably) be replaced with named constants
+      max: 5
+  - name: MethodLengthCheck
+    id: MethodLengthCheck101
+    config:
+      max: 101
+    messages:
+      maxLen.method: Method is excessively long ({0} lines!)
+  - name: MethodLengthCheck
+    id: MethodLengthCheck121
+    config:
+      max: 121
+    messages:
+      maxLen.method: Method is excessively long ({0} lines!)
+  - name: MethodLengthCheck
+    id: MethodLengthCheck140
+    config:
+      max: 140
+    messages:
+      maxLen.method: Method is excessively long ({0} lines!)
+  - name: ktplusplus.checks.DepthComplexity
+    id: DepthComplexity3
+    config:
+      max: 3
+    messages:
+      depth.complexity: Method {2} contains a lot of nesting
+  - name: ktplusplus.checks.DepthComplexity
+    id: DepthComplexity5
+    config:
+      max: 5
+    messages:
+      depth.complexity: Method {2} contains an excessive amount of nesting
 
   - name: VisibilityModifierCheck
     messages:

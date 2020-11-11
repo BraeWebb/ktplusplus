@@ -18,6 +18,13 @@ public class Violation {
         return new Violation(event);
     }
 
+    public String getId() {
+        if (event.getModuleId() != null) {
+            return event.getModuleId();
+        }
+        return getCheck();
+    }
+
     public String getMessage() {
         return event.getMessage();
     }
@@ -51,13 +58,13 @@ public class Violation {
 
         return violation.getColumn() == getColumn()
                 && violation.getMessage().equals(getMessage())
-                && violation.getCheck().equals(getCheck())
+                && violation.getId().equals(getId())
                 && violation.getBasename().equals(getBasename());
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(getColumn(), getMessage(), getCheck(), getBasename());
+        return Objects.hash(getColumn(), getMessage(), getId(), getBasename());
     }
 
     @Override
@@ -66,7 +73,7 @@ public class Violation {
                 "lineNo=" + getLineNo() +
                 ", column=" + getColumn() +
                 ", message=" + getMessage() +
-                ", check=" + getCheck() +
+                ", check=" + getId() +
                 ", basename=" + getBasename() +
                 '}';
     }
