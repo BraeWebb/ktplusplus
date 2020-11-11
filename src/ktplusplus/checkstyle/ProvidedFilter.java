@@ -42,7 +42,6 @@ public class ProvidedFilter implements Filter {
 
         ProvidedFilter filter = new ProvidedFilter();
         filter.violations = new HashSet<>(listener.getViolations());
-        System.out.println(filter.violations);
         return filter;
     }
 
