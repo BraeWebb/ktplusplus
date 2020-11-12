@@ -4,7 +4,25 @@ import com.puppycrawl.tools.checkstyle.api.AbstractCheck;
 import com.puppycrawl.tools.checkstyle.api.DetailAST;
 import com.puppycrawl.tools.checkstyle.api.TokenTypes;
 
+import java.util.*;
+import java.util.stream.Collectors;
+import java.util.stream.DoubleStream;
+
 public class MagicNumber extends AbstractCheck {
+
+    private Set<Double> ignore = new HashSet<>();
+
+    public MagicNumber() {
+        super();
+        ignore.add((double) -1);
+        ignore.add((double) 0);
+        ignore.add((double) 1);
+        ignore.add((double) 2);
+    }
+
+    public void setIgnore(double[] ignore) {
+        this.ignore = DoubleStream.of(ignore).boxed().collect(Collectors.toSet());
+    }
 
     @Override
     public int[] getDefaultTokens() {
@@ -47,9 +65,7 @@ public class MagicNumber extends AbstractCheck {
             return;
         }
 
-        // constants between -1 and 2 are fairly forgivable
-        // TODO: Make this a setting
-        if (value >= -1 && value <= 2) {
+        if (ignore.contains(value)) {
             return;
         }
 

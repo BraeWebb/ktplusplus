@@ -115,6 +115,8 @@ checks:
   - name: ktplusplus.checks.MagicNumber
     messages:
       magic: Use of the magical number {0}
+    config:
+      ignore: "-1, 0, 1, 2, 100"
     prompt:
       context: 6
       hint: Unique values with unexplained meaning or multiple occurrences which could (preferably) be replaced with named constants
