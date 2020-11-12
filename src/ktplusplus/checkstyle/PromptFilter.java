@@ -36,7 +36,7 @@ public class PromptFilter implements Filter {
     private void showContext(Path source, int lineNo, int context) {
         try (Stream<String> lines = Files.lines(source)) {
             List<String> block = lines
-                    .skip(lineNo - (context/2) - 1)
+                    .skip(Math.max(0, lineNo - (context/2) - 1))
                     .limit(context)
                     .collect(Collectors.toList());
             for (String line : block) {
