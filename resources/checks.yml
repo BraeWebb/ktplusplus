@@ -36,7 +36,7 @@ checks:
     messages:
       javadoc.expectedTag: A description for the parameter ''{1}'' is missing from Javadoc
     prompt:
-      context: 8
+      context: 12
       max: 5
       hint: Confirm that this Javadoc warning is valid
   - name: MissingJavadocMethodCheck
@@ -117,6 +117,7 @@ checks:
       magic: Use of the magical number {0}
     config:
       ignore: "-1, 0, 1, 2, 100"
+      ignoredMethods: hashCode
     prompt:
       context: 6
       hint: Unique values with unexplained meaning or multiple occurrences which could (preferably) be replaced with named constants

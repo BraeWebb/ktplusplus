@@ -3,14 +3,16 @@ package ktplusplus.checks;
 import com.puppycrawl.tools.checkstyle.api.AbstractCheck;
 import com.puppycrawl.tools.checkstyle.api.DetailAST;
 import com.puppycrawl.tools.checkstyle.api.TokenTypes;
+import ktplusplus.util.FieldFrame;
 
 import java.util.*;
 import java.util.stream.Collectors;
 import java.util.stream.DoubleStream;
 
-public class MagicNumber extends AbstractCheck {
+public class MagicNumber extends FieldVisitor {
 
     private Set<Double> ignore = new HashSet<>();
+    private Set<String> ignoredMethods = new HashSet<>();
 
     public MagicNumber() {
         super();
@@ -24,35 +26,35 @@ public class MagicNumber extends AbstractCheck {
         this.ignore = DoubleStream.of(ignore).boxed().collect(Collectors.toSet());
     }
 
+    public void setIgnoredMethods(String[] ignore) {
+        this.ignoredMethods = new HashSet<>(Arrays.asList(ignore));
+    }
+
     @Override
-    public int[] getDefaultTokens() {
+    public int[] getTokens() {
         return new int[]{TokenTypes.NUM_INT, TokenTypes.NUM_FLOAT,
                 TokenTypes.NUM_LONG, TokenTypes.NUM_DOUBLE};
     }
 
     @Override
-    public int[] getAcceptableTokens() {
-        return getDefaultTokens();
-    }
-
-    @Override
-    public int[] getRequiredTokens() {
-        return getDefaultTokens();
-    }
-
-    @Override
     public void visitToken(DetailAST ast) {
-        // don't care unless the int is used within a method (i.e. actual code)
-        boolean isInMethod = false;
-        DetailAST parent = ast;
-        while (parent != null) {
-            if (parent.getType() == TokenTypes.METHOD_DEF
-                    || parent.getType() == TokenTypes.CTOR_DEF) {
-                isInMethod = true;
-            }
-            parent = parent.getParent();
+        super.visitToken(ast);
+        if (ast.getType() == TokenTypes.NUM_INT
+                || ast.getType() == TokenTypes.NUM_FLOAT
+                || ast.getType() == TokenTypes.NUM_LONG
+                || ast.getType() == TokenTypes.NUM_DOUBLE) {
+
+        } else {
+            return;
         }
-        if (!isInMethod) {
+        // don't care unless the int is used within a method (i.e. actual code)
+        if (frame.currentScope() != FieldFrame.Scope.METHOD) {
+            return;
+        }
+
+        String[] context = frame.currentScopeID().split("\\.");
+        String methodName = context[context.length - 1];
+        if (ignoredMethods.contains(methodName)) {
             return;
         }
 
@@ -71,4 +73,10 @@ public class MagicNumber extends AbstractCheck {
 
         this.log(ast, "magic", value);
     }
+
+    @Override
+    public void visitReference(DetailAST ast) {}
+
+    @Override
+    public void visitField(DetailAST ast) {}
 }

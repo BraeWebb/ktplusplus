@@ -33,12 +33,21 @@ public class MemberUsage extends FieldVisitor {
         }
 
         for (Map.Entry<String, Set<String>> entry : usedInMethods.entrySet()) {
+            DetailAST field = fieldDetails.get(entry.getKey());
             if (entry.getValue().size() == 0) {
-                log(fieldDetails.get(entry.getKey()), "member.unused", entry.getKey());
+                log(field, "member.unused", entry.getKey());
             }
             if (entry.getValue().size() == 1) {
-                log(fieldDetails.get(entry.getKey()), "member.local",
-                        entry.getKey(), entry.getValue().stream().findAny().get());
+                DetailAST modifiers = field.findFirstToken(TokenTypes.MODIFIERS);
+                boolean isStatic = modifiers.findFirstToken(TokenTypes.LITERAL_STATIC) != null;
+                boolean isFinal = modifiers.findFirstToken(TokenTypes.FINAL) != null;
+
+                if (isStatic && isFinal) {
+                    continue;
+                }
+
+                log(field, "member.local", entry.getKey(),
+                        entry.getValue().stream().findAny().get());
             }
         }
 

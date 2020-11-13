@@ -23,6 +23,8 @@ public abstract class FieldVisitor extends AbstractCheck {
                 TokenTypes.PATTERN_VARIABLE_DEF,
                 TokenTypes.RECORD_COMPONENT_DEF,
 
+                TokenTypes.METHOD_CALL,
+
                 TokenTypes.IDENT,
         };
         int[] additional = getTokens();
@@ -80,6 +82,14 @@ public abstract class FieldVisitor extends AbstractCheck {
                 frame.addField(ident);
                 break;
 
+            case TokenTypes.METHOD_CALL:
+                DetailAST method = ast.getFirstChild().getLastChild();
+                if (method == null) {
+                    return;
+                }
+                visitMethodCall(method);
+                break;
+
             case TokenTypes.IDENT:
                 visitIdent(ast);
                 break;
@@ -131,6 +141,7 @@ public abstract class FieldVisitor extends AbstractCheck {
         visitReference(ast);
     }
 
+    public void visitMethodCall(DetailAST ast) {}
     public abstract void visitReference(DetailAST ast);
     public abstract void visitField(DetailAST ast);
 }

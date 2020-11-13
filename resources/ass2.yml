@@ -14,6 +14,7 @@ files:
   - "~**/src/bms/sensors/Sensor.java"
   - "**/src/bms/util/Encodable.java"
   - "**/src/bms/util/StudyRoomRecommender.java"
+  - "~**/*Test.java"
 
 format:
   maxWarningsPerCheck: 5

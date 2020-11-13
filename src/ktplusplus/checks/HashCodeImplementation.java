@@ -5,10 +5,13 @@ import com.puppycrawl.tools.checkstyle.api.TokenTypes;
 import ktplusplus.util.FieldFrame;
 
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Map;
+import java.util.Set;
 
 public class HashCodeImplementation extends FieldVisitor {
     private Map<String, Integer> fieldUsageCount;
+    private Set<String> superCalledIn;
 
     private int requiredUsages = 2;
 
@@ -24,6 +27,7 @@ public class HashCodeImplementation extends FieldVisitor {
     @Override
     public void beginTree(DetailAST rootAST) {
         fieldUsageCount = new HashMap<>();
+        superCalledIn = new HashSet<>();
     }
 
     @Override
@@ -45,6 +49,17 @@ public class HashCodeImplementation extends FieldVisitor {
     }
 
     @Override
+    public void visitMethodCall(DetailAST ast) {
+        if (!frame.currentScopeID().endsWith("hashCode")) {
+            return;
+        }
+
+        if (ast.getText().endsWith("hashCode")) {
+            superCalledIn.add(frame.currentScopeID());
+        }
+    }
+
+    @Override
     public void leaveToken(DetailAST ast) {
         if (ast.getType() != TokenTypes.METHOD_DEF) {
             super.leaveToken(ast);
@@ -57,7 +72,8 @@ public class HashCodeImplementation extends FieldVisitor {
         }
 
         int usages = fieldUsageCount.getOrDefault(frame.currentScopeID(), 0);
-        if (usages < requiredUsages) {
+        boolean superCalled = superCalledIn.contains(frame.currentScopeID());
+        if (usages < requiredUsages && !superCalled) {
             log(ast, "hashcode.complexity", frame.currentScopeID(),
                     requiredUsages, usages);
         }
